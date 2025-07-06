@@ -73,7 +73,7 @@ def main():
 
     df = pd.DataFrame(issues)
     df.to_excel('data/relatorio_issues.xlsx', index=False)
-    print("✅ Relatório gerado com sucesso: data/relatorio_issues.xlsx")
+    print("Relatório gerado com sucesso: data/relatorio_issues.xlsx")
 
 if __name__ == '__main__':
     main()
