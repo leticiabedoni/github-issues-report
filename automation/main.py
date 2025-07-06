@@ -1,5 +1,6 @@
 import requests
 import pandas as pd
+from datetime import datetime
 from automation.config import GITHUB_TOKEN, REPO_OWNER, REPO_NAME, USUARIOS_DE_INTERESSE
 
 headers = {
@@ -41,10 +42,21 @@ def coletar_issues():
                     closed_by = event['actor']['login']
                     break
 
+            # Datas de criação e fechamento
+            created_at = issue['created_at']
+            closed_at = issue['closed_at']
+
+            # Cálculo de dias até fechamento
+            dias_ate_fechamento = (
+                datetime.strptime(closed_at, "%Y-%m-%dT%H:%M:%SZ") -
+                datetime.strptime(created_at, "%Y-%m-%dT%H:%M:%SZ")
+            ).days
+
             issues_data.append({
                 'Número': issue['number'],
-                'Aberta em': issue['created_at'],
-                'Fechada em': issue['closed_at'],
+                'Aberta em': created_at,
+                'Fechada em': closed_at,
+                'Dias até fechamento': dias_ate_fechamento,
                 'Quem Abriu': autor,
                 'Quem Fechou': closed_by
             })
@@ -61,7 +73,7 @@ def main():
 
     df = pd.DataFrame(issues)
     df.to_excel('data/relatorio_issues.xlsx', index=False)
-    print("Relatório gerado com sucesso: data/relatorio_issues.xlsx")
+    print("✅ Relatório gerado com sucesso: data/relatorio_issues.xlsx")
 
 if __name__ == '__main__':
     main()
