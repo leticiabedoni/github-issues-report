@@ -1,10 +1,9 @@
 import os
 from dotenv import load_dotenv
 
-load_dotenv()  # carrega as variáveis do .env para o ambiente
+load_dotenv()
 
-GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')
-REPO_OWNER = 'leticiabedoni'
-REPO_NAME = 'github-issues-report'
-USUARIOS_DE_INTERESSE = ['leticiabedoni']
-
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
+REPO_OWNER = os.getenv("REPO_OWNER")
+REPO_NAME = os.getenv("REPO_NAME")
+USUARIOS_DE_INTERESSE = os.getenv("USUARIOS_DE_INTERESSE", "").split(",")

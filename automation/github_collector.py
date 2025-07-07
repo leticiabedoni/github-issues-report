@@ -42,11 +42,9 @@ def coletar_issues():
                     closed_by = event['actor']['login']
                     break
 
-            # Datas de criação e fechamento
             created_at = issue['created_at']
             closed_at = issue['closed_at']
 
-            # Cálculo de dias até fechamento
             dias_ate_fechamento = (
                 datetime.strptime(closed_at, "%Y-%m-%dT%H:%M:%SZ") -
                 datetime.strptime(created_at, "%Y-%m-%dT%H:%M:%SZ")
@@ -65,15 +63,10 @@ def coletar_issues():
 
     return issues_data
 
-def main():
-    issues = coletar_issues()
-    if not issues:
-        print("Nenhuma issue encontrada para os usuários filtrados.")
-        return
-
-    df = pd.DataFrame(issues)
-    df.to_excel('data/relatorio_issues.xlsx', index=False)
-    print("Relatório gerado com sucesso: data/relatorio_issues.xlsx")
-
-if __name__ == '__main__':
-    main()
+def gerar_excel(issues_data):
+    df = pd.DataFrame(issues_data)
+    from io import BytesIO
+    output = BytesIO()
+    df.to_excel(output, index=False)
+    output.seek(0)
+    return output.read()
